@@ -104,3 +104,4 @@ dist
 .tern-port
 02-write-file/text.txt
 .vscode/settings.json
+__tests__
