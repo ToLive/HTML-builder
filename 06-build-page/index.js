@@ -13,7 +13,8 @@ const app = async () => {
 
     // check for project dist folder
     try {
-      await fsPromises.readdir(projectFolder, { withFileTypes: true });
+      await fsPromises.rm(projectFolder, { force: true, recursive: true });
+      await fsPromises.mkdir(projectFolder);
     } catch {
       await fsPromises.mkdir(projectFolder);
     }
@@ -85,7 +86,7 @@ const app = async () => {
           continue;
         }
 
-        await fsPromises.mkdir(path.join(dest, item.name));
+        await fsPromises.mkdir(path.join(dest, item.name), { recursive: true });
         copyFiles(path.join(source, item.name), path.join(dest, item.name));
       }
     };
