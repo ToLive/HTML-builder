@@ -105,3 +105,4 @@ dist
 02-write-file/text.txt
 .vscode/settings.json
 __tests__
+project-dist
