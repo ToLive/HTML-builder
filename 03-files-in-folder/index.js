@@ -9,7 +9,7 @@ fs.readdir(dir, { withFileTypes: true }, (err, files) => {
       const filePath = path.resolve(dir, item.name);
 
       fs.stat(filePath, (error, stats) => {
-        console.log(`${item.name} - ${path.extname(filePath).replace('.', '')} - ${(stats.size / 1024).toFixed(2)}kb`);
+        console.log(`${path.basename(filePath).split('.')[0]} - ${path.extname(filePath).replace('.', '')} - ${(stats.size / 1024).toFixed(2)}kb`);
       });
     }
   });
