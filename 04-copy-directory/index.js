@@ -6,7 +6,13 @@ const app = async () => {
     const baseFolder = path.resolve(__dirname,'files');
     const projectFolder = path.resolve(__dirname,'files-copy');
     
-    await fsPromises.mkdir(projectFolder, { recursive: true });
+    // check for project dist folder
+    try {
+      await fsPromises.rm(projectFolder, { force: true, recursive: true });
+      await fsPromises.mkdir(projectFolder);
+    } catch {
+      await fsPromises.mkdir(projectFolder);
+    }
     
     const files = await fsPromises.readdir(baseFolder);
 
