@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fsPromises = require('node:fs/promises');
 const path = require('path');
 const readline = require('node:readline');
 
@@ -7,23 +8,35 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-const writer = fs.createWriteStream(path.resolve(__dirname, 'text.txt'), { flags: 'a' });
+const app = async () => {
+  const destFile = path.resolve(__dirname, 'text.txt');
 
-writer.on('ready', () => {
-  console.log('Hello! Write something\n');
+  try {
+    await fsPromises.rm(destFile, { force: true, recursive: true });
+  } catch {
+    console.log('Error on delete file');
+  }
 
-  rl.on('line', (line) => {
-    if (line === 'exit') {
-      writer.close();
+  const writer = fs.createWriteStream(destFile, { flags: 'a' });
 
-      rl.close();
+  writer.on('ready', () => {
+    console.log('Hello! Write something\n');
 
-      return;
-    }
-    writer.write(`${line}\n`);
+    rl.on('line', (line) => {
+      if (line === 'exit') {
+        writer.close();
+
+        rl.close();
+
+        return;
+      }
+      writer.write(`${line}\n`);
+    });
+
+    rl.on('close', () => {
+      console.log('Thank you! Bye');
+    });
   });
+}
 
-  rl.on('close', () => {
-    console.log('Thank you! Bye');
-  });
-});
+app();
